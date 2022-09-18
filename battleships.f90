@@ -211,7 +211,7 @@ CHARACTER (LEN=32) :: fmt_char, len_char
 IF(IACHAR(a) >= 48 .AND. IACHAR(a) <= 57) THEN ! 48 <= 0 ... 9 <= 57
   WRITE(len_char,'(i0)') LEN(a)
   fmt_char = "(i"//TRIM(ADJUSTL(len_char))//")"
-  !WRITE(6,*) 'fmt = ', fmt_char
+  !print *, 'fmt = ', fmt_char
   READ(a,fmt_char) i
 ELSE
   i = -1
@@ -1055,19 +1055,19 @@ SELECT CASE(ai_data%stage)
           IF(ai_data%adjacent(i,1) > 0) c = c + 1
         END DO
 
-        IF(debug) WRITE(6,'(a,i2)') 'c = ',c ! c should be at least 1 here
+        IF(debug) print '(a,i2)', 'c = ',c ! c should be at least 1 here
 
         i = 1
         DO
           ai_data%pos = ai_data%start + ai_data%clock*i
           IF( ai_data%pos > 4 ) ai_data%pos = ai_data%pos - 4 ! wrap around
           IF( ai_data%pos < 1 ) ai_data%pos = ai_data%pos + 4
-          IF(debug) WRITE(6,'(a,i2)') 'pos = ',ai_data%pos
+          IF(debug) print '(a,i2)', 'pos = ',ai_data%pos
           IF( ai_data%adjacent( ai_data%pos, 1 ) >= 1 .OR. i == 4 ) EXIT
           i = i + 1
         END DO
 
-        IF(debug) WRITE(6,'(a,i2)') 'i = ',i ! if i=4 then an error has occurred
+        IF(debug) print '(a,i2)', 'i = ',i ! if i=4 then an error has occurred
 
         IF( ai_data%adjacent( ai_data%pos , 1 ) >= 1 ) THEN ! the next valid point has been found
 
@@ -1097,7 +1097,7 @@ SELECT CASE(ai_data%stage)
             IF(sunk) THEN
 
               IF(delay) CALL SLEEP(1)
-              WRITE(6,'(3a)') "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
+              print '(3a)', "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
               hits(hits_enemy)%s = hits(hits_enemy)%s + 1
               ai_data%stage = 1
 
@@ -1117,14 +1117,14 @@ SELECT CASE(ai_data%stage)
 
     ! Two hits in a row, the ship has not been sunk. Construct an array similar to adjacent that contains available points
     ! which is then whittled down to only valid points by disregarding points that are off the grid or already fired at.
-    IF(debug) WRITE(6,'(a,i1)') 'scan_stage = ',ai_data%scan_stage
+    IF(debug) print '(a,i1)', 'scan_stage = ',ai_data%scan_stage
 
     SELECT CASE(ai_data%scan_stage)
 
       CASE (1) ! set up line array and fire at first available point
 
         ai_data%line(0,1:2) = ai_data%centre
-        IF(debug) WRITE(6,'(a,i2)') 'pos = ',ai_data%pos
+        IF(debug) print '(a,i2)', 'pos = ',ai_data%pos
 
         SELECT CASE(ai_data%pos)
 
@@ -1164,7 +1164,7 @@ SELECT CASE(ai_data%stage)
         IF(debug) THEN
           print '(a)', 'line ='
           DO i=-4,4
-            WRITE(6,'(3(1x,i2))')  i, ai_data%line(i,1:2)
+            print '(3(1x,i2))',  i, ai_data%line(i,1:2)
           END DO
         END IF
 
@@ -1199,7 +1199,7 @@ SELECT CASE(ai_data%stage)
         IF(debug) THEN
           print '(a)', 'line ='
           DO i=-4,4
-            WRITE(6,'(3(1x,i2))')  i, ai_data%line(i,1:2)
+            print '(3(1x,i2))',  i, ai_data%line(i,1:2)
           END DO
         END IF
 
@@ -1209,7 +1209,7 @@ SELECT CASE(ai_data%stage)
           IF(ai_data%line(i,1) > 0) c = c + 1
         END DO
 
-        IF(debug) WRITE(6,'(a,i2)') 'c = ',c ! c=1:7
+        IF(debug) print '(a,i2)', 'c = ',c ! c=1:7
 
         IF(c == 0) error STOP 'c'
 
@@ -1222,13 +1222,13 @@ SELECT CASE(ai_data%stage)
             ai_data%clock = -1*ai_data%clock; i = 1; ai_data%line_pos = ai_data%clock*i
           END IF
 
-          IF(debug) WRITE(6,'(a,i2)') 'line_pos1 = ',ai_data%line_pos
+          IF(debug) print '(a,i2)', 'line_pos1 = ',ai_data%line_pos
 
           IF(ai_data%line(ai_data%line_pos,1) >= 1 .OR. i == 5) EXIT
           i = i + 1
         END DO
 
-        IF(debug) WRITE(6,'(a,i2)') 'i = ',i ! if i=5 then an error has occurred
+        IF(debug) print '(a,i2)', 'i = ',i ! if i=5 then an error has occurred
 
         IF( ai_data%line( ai_data%line_pos , 1 ) >= 1 ) THEN ! the next valid point has been found
 
@@ -1263,7 +1263,7 @@ SELECT CASE(ai_data%stage)
             IF(sunk) THEN
 
               IF(delay) CALL SLEEP(1)
-              WRITE(6,'(3a)') "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
+              print '(3a)', "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
               hits( hits_enemy )%s = hits( hits_enemy )%s + 1
               ai_data%stage = 1
 
@@ -1282,7 +1282,7 @@ SELECT CASE(ai_data%stage)
         ! update  line array
         ai_data%line(0,1:2) = ai_data%centre
 
-        IF(debug) WRITE(6,'(a,i2)') 'pos = ',ai_data%pos
+        IF(debug) print '(a,i2)', 'pos = ',ai_data%pos
 
         SELECT CASE( ai_data%pos )
 
@@ -1322,7 +1322,7 @@ SELECT CASE(ai_data%stage)
         IF(debug) THEN
           print '(a)', 'line ='
           DO i=-4,4
-            WRITE(6,'(3(1x,i2))')  i, ai_data%line(i,1:2)
+            print '(3(1x,i2))',  i, ai_data%line(i,1:2)
           END DO
         END IF
 
@@ -1352,7 +1352,7 @@ SELECT CASE(ai_data%stage)
         IF(debug) THEN
           print '(a)', 'line ='
           DO i=-4,4
-            WRITE(6,'(3(1x,i2))')  i, ai_data%line(i,1:2)
+            print '(3(1x,i2))',  i, ai_data%line(i,1:2)
           END DO
         END IF
 
@@ -1360,7 +1360,7 @@ SELECT CASE(ai_data%stage)
         DO i=-4,4
           IF( ai_data%line(i,1) > 0 .AND. i < 0 ) c = c + 1
         END DO
-        IF(debug) WRITE(6,'(a,i2)') 'c = ',c ! c=1:7
+        IF(debug) print '(a,i2)', 'c = ',c ! c=1:7
 
         ai_data%clock = -1; i = 1
         DO
@@ -1370,12 +1370,12 @@ SELECT CASE(ai_data%stage)
             ai_data%clock = -1*ai_data%clock; i = 1; ai_data%line_pos = ai_data%clock*i
           END IF
 
-          IF(debug) WRITE(6,'(a,i2)') 'line_pos2 = ',ai_data%line_pos
+          IF(debug) print '(a,i2)', 'line_pos2 = ',ai_data%line_pos
 
           IF( ai_data%line(ai_data%line_pos,1) >= 1 .OR. i == 5 ) EXIT
           i = i + 1
         END DO
-        IF(debug) WRITE(6,'(a,i2)') 'i = ',i ! if i=5 then an error has occurred
+        IF(debug) print '(a,i2)', 'i = ',i ! if i=5 then an error has occurred
 
         IF( ai_data%line( ai_data%line_pos, 1 ) >= 1 ) THEN ! the next valid point has been found
 
@@ -1408,7 +1408,7 @@ SELECT CASE(ai_data%stage)
 
             IF(sunk) THEN
               IF(delay) CALL SLEEP(1)
-              WRITE(6,'(3a)') "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
+              print '(3a)', "I've sunk your ",TRIM( enemy( hit_ship )%n ),"!"
               hits( hits_enemy )%s = hits( hits_enemy )%s + 1
               ai_data%stage = 1
             END IF
@@ -1469,7 +1469,7 @@ IF(configExist) THEN ! file already exists, open with old status
   OPEN(newunit=u, FILE=config_location, STATUS='old')
 
   DO
-!      WRITE(6,'(a)',ADVANCE='no') 'Searching for headers ... '
+!      WRITE(stdout,'(a)',ADVANCE='no') 'Searching for headers ... '
     READ(u,'(a)',IOSTAT=ios) char_in
     IF(ios /= 0) exit
     !char_in = ADJUSTL(char_in) ! contract to remove spaces?
@@ -1479,7 +1479,7 @@ IF(configExist) THEN ! file already exists, open with old status
     IF(char_in(1:1) == '[') THEN ! type found
       i = LEN(TRIM(char_in))
       READ(char_in(i:i),'(a1)') char_one
-      !WRITE(6,'(a,i0,a)') 'LEN=',i,' last="'//char_one//'"'
+      !print '(a,i0,a)', 'LEN=',i,' last="'//char_one//'"'
 
       IF(char_one == ']') THEN
         READ(char_in(2:i-1),'(a)') char_temp
@@ -1488,21 +1488,20 @@ IF(configExist) THEN ! file already exists, open with old status
         SELECT CASE(char_temp)
           CASE('seed')
             DO ! search for tags
-!                WRITE(6,'(a)',ADVANCE='no') ' Searching for tags ... '
+!                WRITE(stdout,'(a)',ADVANCE='no') ' Searching for tags ... '
               READ(u,'(a)',IOSTAT=ios) char_in
               IF(ios /= 0) exit
-!                WRITE(6,*)
               ! search for equals sign
               !print '(a)', '  tagLine="'//TRIM(char_in)//'"'
               i = 1
               DO
                 READ(char_in(i:i),'(a1)') char_one
-                !WRITE(6,'(a,i0)') 'i=',i
+                !print '(a,i0)', 'i=',i
                 IF(char_one == '=') EXIT
                 IF(i == LEN(TRIM(char_in))) error STOP 'error: could not identify a tag'
                 i = i + 1
               END DO
-              !WRITE(6,'(a,i0)') ' Found = at i=',i
+              !print '(a,i0)', ' Found = at i=',i
               READ(char_in(1:i-1),'(a)') tag_name
 !                print '(a)', '  tagName="'//TRIM(tag_name)//'"'
 
@@ -1532,11 +1531,11 @@ IF(configExist) THEN ! file already exists, open with old status
       !i = 1
       !DO
       !  READ(char_in(i:LEN(TRIM(char_in))),'(a1)',IOSTAT=ios) char_one; IF(ios /= 0) STOP 'error: bad read'
-      !  WRITE(6,'(a,i0,a)') 'i=',i,' char_one='//char_one
+      !  print '(a,i0,a)', 'i=',i,' char_one='//char_one
       !  IF(char_one == ']') EXIT
       !  i = i + 1
       !END DO
-      !WRITE(6,'(a,i0)') 'i=',i
+      !print '(a,i0)', 'i=',i
     END IF
   END DO
 ELSE ! file does not already exist, so make a new one with default values
@@ -1552,7 +1551,7 @@ CLOSE(u)
 CALL ranseed(TRIM(seed_operation),'seedbank_'//TRIM(seed_bank)//'.dat') ! saves and loads seeds from file
 
 call sleep(2)
-!WRITE(6,'(a)',ADVANCE='no') 'Press enter to continue...'; read(stdin,*)
+!WRITE(stdout,'(a)',ADVANCE='no') 'Press enter to continue...'; read(stdin,*)
 !  STOP 'debug'
 
 ! initialise grid, error values, and sunk variables
@@ -1604,7 +1603,7 @@ END DO
 ! print '(/,a)', ' NB: This program uses the SLEEP function to add '
 ! print '(a)', '     delays to the gameplay on purpose.          '
 ! call sleep(2)
-!WRITE(6,'(a)',ADVANCE='no') 'Press enter to continue...'; read(stdin,*)
+!WRITE(stdout,'(a)',ADVANCE='no') 'Press enter to continue...'; read(stdin,*)
 
 DO ! Main Menu
 
@@ -1618,7 +1617,7 @@ DO ! Main Menu
   print '(a)', ' 3 Watch an automated battle'
   print '(a)', ' 4 About'
   DO
-    WRITE(6,'(a,1x)', ADVANCE='no') '<I> Enter your chosen option from the # column [1-4]:'
+    WRITE(stdout,'(a,1x)', ADVANCE='no') '<I> Enter your chosen option from the # column [1-4]:'
     read(stdin,'(i1)', iostat=i) ans_n1
     if(i == iostat_end) stop
     if(i /= 0) cycle
@@ -1629,7 +1628,7 @@ DO ! Main Menu
     CASE(1)
       DO ! Display ship placement menu
         write(stdout,"(a)", advance="no") CLEAR_SCREEN
-        WRITE(6,*)
+
         CALL grid_1(defence,'d')
         print '(/,a)',                  ' Ship Placement Menu'
         print '(a)',                  ' #       Option         Symbols Length'
