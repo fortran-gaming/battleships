@@ -10,6 +10,8 @@ The changes we did include:
 * use `iso_fortran_env`
 * use `read(..., iostat=)` to handle unexpected input
 * use escape characters instead of system calls to clear screen
+* use standrd sleep() implementation we created in scivision/fortran-sleep
+* break code up into source files for ease of devel
 
 Tested on compilers including:
 
@@ -18,3 +20,20 @@ Tested on compilers including:
 * Flang
 * NVidia HPC SDK
 * AOCC AMD Optimizing Compilers
+
+## Build
+
+CMake or FPM (Fortran Package Manager) can quickly build Battleships:
+
+```sh
+cmake -B build
+cmake --build build
+
+build/battleships  # runs game
+```
+
+OR
+
+```sh
+fpm run
+```

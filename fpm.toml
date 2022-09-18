@@ -1,0 +1,5 @@
+name = "battleships"
+version = "1.0.0"
+license = "MIT"
+keywords = ["games"]
+homepage = "https://github.com/fortran-gaming/battleships"
