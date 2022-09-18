@@ -3,9 +3,11 @@
 
 PROGRAM battleships_game
 
+use iso_fortran_env, only : iostat_end, stdout=>output_unit, stdin=>input_unit
 USE battleships_mod
+use misc_mod, only: sleep, strip_spaces, convert_char2num, convert_charnum2num
 
-IMPLICIT NONE
+IMPLICIT NONE (type, external)
 
 INTEGER :: ans_n1, ans_n2, e1, e2, c, i, r, ax, ay1, ay2, hit_ship = 0, ios, u
 CHARACTER :: ans*3, ans_char*1, char_in*32, char_one*1, char_temp*32, tag_name*32, tag_value*32, msg*64 = ''

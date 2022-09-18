@@ -8,13 +8,12 @@
 
 MODULE battleships_mod
 
-use iso_fortran_env, only : iostat_end, stdout=>output_unit
+use iso_fortran_env, only : iostat_end, stdout=>output_unit, stdin=>input_unit
+use misc_mod, only : sleep, convert_char2num, convert_charnum2num, convert_num2char, toUpper, sort_1d
 
-USE misc_mod
+implicit none (type, external)
 
-implicit none
-
-CHARACTER(LEN=1), PARAMETER :: CH = '*', CM = '.', CB = ' ', CN = '0', GSV = '|', GSH = '=', GC = '+'
+CHARACTER, PARAMETER :: CH = '*', CM = '.', CB = ' ', CN = '0', GSV = '|', GSH = '=', GC = '+'
 
 TYPE ship ! Destroyer, Cruiser, Submarine, Battleship, Aircraft Carrier
 INTEGER :: x, y, l, h
@@ -45,6 +44,9 @@ INTEGER, DIMENSION(-4:4,1:2) :: line
 LOGICAL :: first_time  = .TRUE.
 END TYPE ai_saved_data
 
+private
+public :: ship, target, scoreboard_entity, ai, ai_saved_data, CH,CM,CN,CB, &
+ scoreboard, logo, grid_1, grid_2, clearship, shipdata, ranship, setship, display_target, identify
 CONTAINS
 
 SUBROUTINE scoreboard(title,entities)
@@ -368,7 +370,7 @@ DO
     end select
   END DO
 
-  CALL toUpper( boat%z )
+  boat%z = toUpper( boat%z )
   CALL checkship_grid (boat, error_grid )
   CALL checkship_collision( boat,array, error_collision )
 
@@ -556,7 +558,7 @@ TYPE(ship), DIMENSION(:), INTENT(INOUT) :: boats
 ! Identify which ship was hit and determine if it has been sunk.
 
 ! t%s(1:1) identifies ship by initial; need to convert to upper
-CALL toUpper(t%s(1:1))
+t%s(1:1) = toUpper(t%s(1:1))
 
 SELECT CASE (t%s(1:1))
   CASE ('D')

@@ -1,7 +1,6 @@
 MODULE misc_mod
 
 use, intrinsic :: iso_c_binding, only : C_INT
-use, intrinsic :: iso_fortran_env, only : stdin => input_unit
 
 implicit none
 
@@ -11,6 +10,10 @@ import
 integer(C_INT), intent(in) :: ms
 end subroutine
 end interface
+
+private
+public :: convert_num2char, toUpper, sort_1d, convert_char2num, convert_charnum2num, &
+strip_spaces, sleep
 
 CONTAINS
 
@@ -142,15 +145,16 @@ END SELECT
 
 END SUBROUTINE convert_num2char
 
-SUBROUTINE toUpper(a)
 
-CHARACTER (LEN=1), INTENT(INOUT) :: a
+elemental character function toUpper(a)
+CHARACTER, INTENT(IN) :: a
 
 IF(IACHAR(a) >= 97 .AND. IACHAR(a) <= 122) THEN ! 97 <= a...z lowercase <= 122
-  a = ACHAR(IACHAR(a) - 32) ! 65 <= A...Z uppercase <= 90
+  toUpper = ACHAR(IACHAR(a) - 32) ! 65 <= A...Z uppercase <= 90
 END IF
 
-END SUBROUTINE toUpper
+END function toUpper
+
 
 SUBROUTINE char2int(a,i)
 
