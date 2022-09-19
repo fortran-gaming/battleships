@@ -17,9 +17,6 @@ Tested on compilers including:
 
 * GCC gfortran
 * Intel oneAPI
-* Flang
-* NVidia HPC SDK
-* AOCC AMD Optimizing Compilers
 
 ## Build
 
