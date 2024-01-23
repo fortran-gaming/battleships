@@ -156,23 +156,6 @@ END IF
 END function toUpper
 
 
-SUBROUTINE char2int(a,i)
-
-CHARACTER (LEN=*), INTENT(IN) :: a
-INTEGER, INTENT(OUT) :: i
-CHARACTER (LEN=32) :: fmt_char, len_char
-
-IF(IACHAR(a) >= 48 .AND. IACHAR(a) <= 57) THEN ! 48 <= 0 ... 9 <= 57
-  WRITE(len_char,'(i0)') LEN(a)
-  fmt_char = "(i"//TRIM(ADJUSTL(len_char))//")"
-  !print *, 'fmt = ', fmt_char
-  READ(a,fmt_char) i
-ELSE
-  i = -1
-END IF
-
-END SUBROUTINE char2int
-
 SUBROUTINE strip_spaces( string )
 
   CHARACTER(LEN=*), INTENT(INOUT) :: string

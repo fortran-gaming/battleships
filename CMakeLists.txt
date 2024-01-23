@@ -1,12 +1,15 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.15...3.29)
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "In-source builds are not allowed.
+  cmake -Bbuild")
+endif()
 
 project(BattleShips
 LANGUAGES C Fortran
 )
 
-if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
-  file(WRITE ${PROJECT_BINARY_DIR}/.gitignore "*")
-endif()
+file(GENERATE OUTPUT .gitignore CONTENT "*")
 
 add_compile_options(
 "$<$<COMPILE_LANG_AND_ID:C,GNU>:-Wall>"
